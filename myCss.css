@@ -1,0 +1,33 @@
+/*logo*/
+@font-face {
+font-family: 'neora';
+src: url("asset/fonts/neora.woff") format('woff');
+}
+.my-logo{
+  font-family: 'neora';
+  color: #1da1f2;
+  font-size: 240%;
+}
+/*dropdown*/
+.my-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.my-dropdown-content {
+  display: none;
+  position: absolute;
+}
+
+.my-dropdown-content a {
+  display: block;
+}
+
+.my-dropdown:hover .my-dropdown-content {
+  display: block;
+}
+.my-dropdown:active .my-dropdown-content {
+  display: block;
+}
+/*modal*/
+

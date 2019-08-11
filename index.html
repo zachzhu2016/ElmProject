@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>index</title>
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.css"
+        />
+        <link rel="stylesheet" type="text/css" href="./myCss.css" />
+        <script src="elm.js"></script>
+    </head>
+    <body>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                var storageKey = 'store';
+                var user = localStorage.getItem(storageKey);
+                var cartKey = 'cart';
+                var cart = localStorage.getItem(cartKey);
+
+                //var flags = {user: user, cart: cart};
+                var flags = cart;
+
+                var app = Elm.Main.init({flags: flags});
+
+                app.ports.storeCache.subscribe(function(val) {
+                    if (val === null) {
+                        localStorage.removeItem(storageKey);
+                    } else {
+                        localStorage.setItem(storageKey, JSON.stringify(val));
+                        alert(localStorage.getItem(storageKey));
+                    }
+                    // Report that the new session was stored succesfully.
+                    setTimeout(function() {
+                        app.ports.onStoreChange.send(val);
+                    }, 0);
+                });
+
+                //Whenever localStorage changes in another tab, report it if necessary.
+                window.addEventListener(
+                    'storage',
+                    function(event) {
+                        if (
+                            event.storageArea === localStorage &&
+                            event.key === storageKey
+                        ) {
+                            app.ports.onStoreChange.send(event.newValue);
+                        }
+                    },
+                    false,
+                );
+                //cart management
+                app.ports.storeCart.subscribe(function(val) {
+                    if (val === null) {
+                        localStorage.removeItem(cartKey);
+                    } else {
+                        localStorage.setItem(cartKey, JSON.stringify(val));
+                    }
+                    setTimeout(function() {
+                        app.ports.onCartChange.send(val);
+                    }, 0);
+                });
+            });
+        </script>
+    </body>
+</html>
